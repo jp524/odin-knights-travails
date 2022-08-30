@@ -50,7 +50,7 @@ class Knight
   end
 
   def build_tree(root = @root, counter = 0)
-    return if counter == 3
+    return if counter == 2
 
     counter += 1
     children = available_moves(root.data)
@@ -60,8 +60,24 @@ class Knight
       build_tree(node, counter)
     end
   end
+
+  def level_order
+    return if @root.nil?
+
+    queue = []
+    array = []
+    queue << @root
+    until queue.empty?
+      current = queue.first
+      yield current if block_given?
+      array << current.data
+      current.children&.each { |child| queue << child }
+      queue.shift
+    end
+    array
+  end
 end
 
 game = Knight.new
 game.knight_moves([0, 0], [3, 1])
-p game.root
+game.level_order { |node| p node.data }
