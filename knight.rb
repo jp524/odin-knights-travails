@@ -16,7 +16,21 @@ class Knight
       true
     end
   end
+
+  def available_moves(start)
+    x, y = start
+    moves = [[x - 1, y + 2],
+             [x - 1, y - 2],
+             [x + 1, y + 2],
+             [x + 1, y - 2],
+             [x - 2, y + 1],
+             [x - 2, y - 1],
+             [x + 2, y + 1],
+             [x + 2, y - 1]]
+    moves.filter! { |move| (0..7).include?(move[0]) && (0..7).include?(move[1]) }
+  end
 end
 
 game = Knight.new
-game.knight_moves([0, 8], [0, 0])
+# game.knight_moves([0, 8], [0, 0])
+p game.available_moves([0, 0])
