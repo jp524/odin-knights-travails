@@ -2,11 +2,12 @@
 
 # Creates a node containing data and its children
 class Node
-  attr_accessor :data, :children
+  attr_accessor :data, :children, :parent
 
   def initialize(data)
     @data = data
     @children = []
+    @parent = nil
   end
 end
 
@@ -21,6 +22,19 @@ class Knight
   def knight_moves(start, finish)
     @root = Node.new(start) if valid_move?(start, finish)
     build_tree
+    finish_node = nil
+    level_order { |node| finish_node = node if node.data == finish }
+    path = path_to_start(finish_node) << @root.data
+    puts "You made it in #{path.length} moves! Here's your path:"
+    path.each { |node| p node }
+  end
+
+  def path_to_start(node = finish_node, path = [])
+    return if node == @root
+
+    path << node.data
+    path_to_start(node.parent, path)
+    path
   end
 
   def valid_move?(start, finish)
@@ -56,6 +70,7 @@ class Knight
     children = available_moves(root.data)
     children.each do |child|
       node = Node.new(child)
+      node.parent = root
       root.children << node
       build_tree(node, counter)
     end
@@ -80,4 +95,3 @@ end
 
 game = Knight.new
 game.knight_moves([0, 0], [3, 1])
-game.level_order { |node| p node.data }
