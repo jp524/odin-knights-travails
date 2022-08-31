@@ -29,7 +29,7 @@ class Knight
     level_order { |node| @finish_node = node if node.data == finish }
 
     if !@finish_node.nil?
-      path = path_to_start(@finish_node) << @root.data
+      path = path_to_start << @root.data
       puts "You made it in #{path.length - 1} moves! Here's your path:"
       path.reverse.each { |node| p node }
     else
@@ -38,7 +38,7 @@ class Knight
     end
   end
 
-  def path_to_start(node = finish_node, path = [])
+  def path_to_start(node = @finish_node, path = [])
     return if node == @root
 
     path << node.data
@@ -68,7 +68,12 @@ class Knight
              [x - 2, y - 1],
              [x + 2, y + 1],
              [x + 2, y - 1]]
+    filter_sort_moves(moves)
+  end
+
+  def filter_sort_moves(moves)
     moves.filter! { |move| (0..7).include?(move[0]) && (0..7).include?(move[1]) }
+    moves.sort_by! { |move| move }
     moves
   end
 
