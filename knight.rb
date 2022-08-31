@@ -17,16 +17,25 @@ class Knight
 
   def initialize
     @root = []
+    @finish_node = nil
+    @counter_max = 2
   end
 
   def knight_moves(start, finish)
-    @root = Node.new(start) if valid_move?(start, finish)
+    return unless valid_move?(start, finish)
+
+    @root = Node.new(start)
     build_tree
-    finish_node = nil
-    level_order { |node| finish_node = node if node.data == finish }
-    path = path_to_start(finish_node) << @root.data
-    puts "You made it in #{path.length} moves! Here's your path:"
-    path.each { |node| p node }
+    level_order { |node| @finish_node = node if node.data == finish }
+
+    if !@finish_node.nil?
+      path = path_to_start(@finish_node) << @root.data
+      puts "You made it in #{path.length - 1} moves! Here's your path:"
+      path.reverse.each { |node| p node }
+    else
+      @counter_max += 2
+      knight_moves(start, finish)
+    end
   end
 
   def path_to_start(node = finish_node, path = [])
@@ -64,7 +73,7 @@ class Knight
   end
 
   def build_tree(root = @root, counter = 0)
-    return if counter == 2
+    return if counter == @counter_max
 
     counter += 1
     children = available_moves(root.data)
@@ -94,4 +103,4 @@ class Knight
 end
 
 game = Knight.new
-game.knight_moves([0, 0], [3, 1])
+game.knight_moves([3, 3], [4, 3])
