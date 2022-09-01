@@ -1,6 +1,6 @@
 # frozen_string_literal: false
 
-# Display chess board and the current position of the knight
+# Display a chess board and the moves made by the knight
 class Board
   def initialize
     @board = Array.new(8) { Array.new(8) { ' ' } }
@@ -15,15 +15,9 @@ class Board
     end
   end
 
-  def place_knight(position)
-    if !(0..7).include?(position[0]) || !(0..7).include?(position[1])
-      puts 'Position must be between [0, 0] and [7, 7]'
-    else
-      @board[position[0]][position[1]] = 'X'
+  def place_knight(path)
+    path.each_with_index do |move, i|
+      @board[move[0]][move[1]] = i
     end
   end
 end
-
-board = Board.new
-board.place_knight([5, 0])
-board.display

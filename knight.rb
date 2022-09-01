@@ -1,5 +1,7 @@
 # frozen_string_literal: false
 
+require './board'
+
 # Creates a node containing data and its children
 class Node
   attr_accessor :data, :children, :parent
@@ -19,6 +21,7 @@ class Knight
     @root = []
     @finish_node = nil
     @counter_max = 2
+    @board = Board.new
   end
 
   def knight_moves(start, finish)
@@ -30,12 +33,19 @@ class Knight
 
     if !@finish_node.nil?
       path = path_to_start << @root.data
-      puts "You made it in #{path.length - 1} moves! Here's your path:"
-      path.reverse.each { |node| p node }
+      # puts "You made it in #{path.length - 1} moves! Here's your path:"
+      path = path.reverse
+      # path.each { |node| p node }
+      display_board(path)
     else
       @counter_max += 2
       knight_moves(start, finish)
     end
+  end
+
+  def display_board(path)
+    @board.place_knight(path)
+    @board.display
   end
 
   def path_to_start(node = @finish_node, path = [])
